@@ -225,87 +225,91 @@ return [
 
     'menu' => [
         [
-            'text' => 'search',
+            'text' => 'Cari JP - . . . . ',
             'search' => true,
             'topnav' => true,
+            'type'         => 'navbar-search',
+            // 'topnav_right' => true,            // Or "topnav => true" to place on the left.
+            'url'          => 'data/search', // The url used to submit the data ('#' by default).
+            'method'       => 'post',          // 'get' or 'post' ('get' by default).
+            'input_name'   => 'searchVal',     // Name for the underlying input ('adminlteSearch' by default).
+            'id'           => 'navbarSearch' 
         ],
         [
-            'text' => 'blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
+            'type'         => 'fullscreen-widget',
+            'topnav_right' => true, // Or "topnav => true" to place on the left.
         ],
-        [
-            'text'        => 'pages',
-            'url'         => 'admin/pages',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
-            'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text'    => 'multilevel',
-            'icon'    => 'fas fa-fw fa-share',
-            'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
-                [
-                    'text'    => 'level_one',
-                    'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
-            ],
-        ],
-        ['header' => 'labels'],
-        [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
-        ],
+        // [
+        //     'text' => 'blog',
+        //     'url'  => 'admin/blog',
+        //     'can'  => 'manage-blog',
+        // ],
+        
+        // [
+        //     'key'       => 'main_navigation',
+        //     'header'    => 'MAIN NAVIGATION'
+        // ],
+        // [
+        //     'key'         => 'dashboard',
+        //     'text'        => 'Dashboard',
+        //     'url'         => 'admin/dashboard',
+        //     'icon'        => 'far fa-fw fa-file',
+        // ],
+        // [
+        //     'key'         => 'Agenda',
+        //     'text'        => 'agenda',
+        //     'url'         => 'admin/agenda',
+        //     'icon'        => 'far fa-fw fa-file',
+        //     'active'      => ['admin/agenda/*']
+        // ],
+        // [
+        //     'key'         => 'verifikasi',
+        //     'text'        => 'Verifikasi',
+        //     'url'         => 'admin/verifikasi',
+        //     'icon'        => 'far fa-fw fa-file',
+        //     'active'      => ['admin/verifikasi/*']
+        // ],
+        // [
+        //     'key'         => 'pengelola',
+        //     'text'        => 'Pengelola',
+        //     'url'         => 'admin/pengelola',
+        //     'icon'        => 'far fa-fw fa-file',
+        //     'active'      => ['admin/pengelola/*']
+        // ],
+        // [
+        //     'key'         => 'bud',
+        //     'text'        => 'Bud / Kuasa BUD',
+        //     'url'         => 'admin/bud',
+        //     'icon'        => 'far fa-fw fa-file',
+        //     'active'      => ['admin/bud/*']
+        // ],
+        // [
+        //     'key'       => 'master',
+        //     'header'    => 'MASTER'
+        // ],
+        // [
+        //     'key'       => 'pengaturan_akun',
+        //     'header'    => 'PENGATURAN AKUN'
+        // ],
+        // [
+        //     'key'  => 'pengguna',
+        //     'text' => 'pengguna',
+        //     'url'  => 'admin/user',
+        //     'icon' => 'fas fa-fw fa-user',
+        //     'active'=> ['admin/user/*']
+        // ],
+        // [
+        //     'key'  => 'profile',
+        //     'text' => 'profile',
+        //     'url'  => 'profile/username',
+        //     'icon' => 'fas fa-fw fa-user',
+        // ],
+        // [
+        //     'key'  => 'change_password',
+        //     'text' => 'change_password',
+        //     'url'  => 'profile/change-password',
+        //     'icon' => 'fas fa-fw fa-lock',
+        // ],
     ],
 
     /*
@@ -344,37 +348,57 @@ return [
 
     'plugins' => [
         'Datatables' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '/vendor/datatables/js/jquery.dataTables.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '/vendor/datatables/js/dataTables.bootstrap4.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => '/vendor/datatables/css/dataTables.bootstrap4.min.css',
+                ],
+            ],
+        ],
+        'jqueryUi' => [
             'active' => false,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js',
-                ],
-                [
-                    'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js',
+                    'asset' => true,
+                    'location' => '/vendor/jquery-ui/jquery-ui.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
+                    'asset' => true,
+                    'location' => '/vendor/jquery-ui/jquery-ui.min.css',
                 ],
             ],
         ],
         'Select2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js',
+                    'asset' => true,
+                    'location' => '/vendor/select2/js/select2.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',
+                    'asset' => true,
+                    'location' => '/vendor/select2/css/select2.min.css',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => '/vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css',
                 ],
             ],
         ],
@@ -389,12 +413,17 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
+                    'asset' => true,
+                    'location' => '/vendor/sweetalert2/sweetalert2.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => '/vendor/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css',
                 ],
             ],
         ],
@@ -410,6 +439,41 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
+                ],
+            ],
+        ],
+        'daterangepicker' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => '/vendor/daterangepicker/daterangepicker.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => '/vendor/daterangepicker/daterangepicker.css',
+                ],
+            ],
+        ],
+        'tempusdominusBootstrap4' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/moment/moment.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css',
                 ],
             ],
         ],
