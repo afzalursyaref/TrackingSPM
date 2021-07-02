@@ -95,4 +95,25 @@ class SimdaController extends Controller
         $skpkInsert = Skpk::insert($dataSkpk);
         dd($skpkInsert);
     }
+
+    public function sp2dAll(Request $request)
+    {
+        if($request->ajax()){
+            $sp2d = Db::connection('sqlsrv')->table('ta_sp2d')
+                ->select(
+                    'no_sp2d', 'no_spm', 'keterangan',
+                    DB::raw('(select cast(SUM(nilai) as numeric(19,0)) from ta_spm_rinc where no_spm=ta_sp2d.no_spm) as jml_kotor'), 
+                    DB::raw('(select cast(ISNULL(SUM(nilai), 0) as numeric(19,0)) from ta_spm_pot where no_spm=ta_sp2d.no_spm) as potongan'),
+                )
+                ->get();
+
+            return datatables()->of($sp2d)
+                ->addColumn('jml_bersih', function($row){
+                    return $row->jml_kotor - $row->potongan;
+                })
+                ->toJson();
+        }
+        
+        return view('dashboard.sp2d');
+    }
 }

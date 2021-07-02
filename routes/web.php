@@ -154,3 +154,6 @@ Route::get('/admin/updateBox', [App\Http\Controllers\DashboardController::class,
 
 Route::get('/timeline/{kode}', [App\Http\Controllers\DashboardController::class, 'timeline'])->name('dashboard.timeline');
 Route::get('/kode/{kode}', [App\Http\Controllers\DashboardController::class, 'kode'])->name('dashboard.kode');
+
+Route::get('admin/sp2d', [\App\Http\Controllers\SimdaController::class, 'sp2dAll'])->name('admin.sp2d')
+    ->middleware('auth');

@@ -83,36 +83,35 @@
             </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-12">
-            <div class="card card-primary">
-                <div class="card-header">
-                    Data Agenda
-                </div>
-                <div class="card-body">
-                    <table id="dashboardTable" class="table table-bordered table-striped display nowrap">
-                        <thead>
-                            <tr>
-                                <th>Aksi</th>
-                                <th>Nomor</th>
-                                <th>Tgl Agenda</th>
-                                <th>SKPK</th>
-                                <th>No SPM</th>
-                                <th>Tgl SPM</th>
-                                <th>Uraian</th>
-                                <th>Jml Kotor</th>
-                                <th>Potongan</th>
-                                <th>Jml Bersih</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                Data Agenda
+            </div>
+            <div class="card-body">
+                <table id="dashboardTable" class="table table-bordered table-striped display nowrap">
+                    <thead>
+                        <tr>
+                            <th>Aksi</th>
+                            <th>Nomor</th>
+                            <th>Tgl Agenda</th>
+                            <th>SKPK</th>
+                            <th>No SPM</th>
+                            <th>Tgl SPM</th>
+                            <th>Uraian</th>
+                            <th>Jml Kotor</th>
+                            <th>Potongan</th>
+                            <th>Jml Bersih</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
     </div>
-
-    {{-- {{ dd($data['agenda_count']) }} --}}
+</div>
+{{-- {{ dd($data['agenda_count']) }} --}}
 @stop
 
 @push('js')
