@@ -9,6 +9,7 @@ use App\Models\Verifikasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class AgendaController extends Controller
 {
@@ -23,9 +24,10 @@ class AgendaController extends Controller
             $model = Agenda::leftJoin('skpk', 'agenda.skpk_id', '=', 'skpk.id')
                 ->leftJoin('users', 'agenda.disposisi_user_id', '=', 'users.id')
                 ->select('agenda.*', 'skpk.nm_skpk', 'users.name')
+                ->where('agenda.user_id', '=', auth()->id())
                 ->where('agenda.send', '=', false);
                 // ->orderBy('agenda.tgl_agenda', 'asc');
-            
+
             return datatables()->of($model)
                 ->editColumn('tgl_agenda', function($row){
                     return \Carbon\Carbon::parse($row->tgl_agenda)->format('d-m-Y H:i');
@@ -37,7 +39,7 @@ class AgendaController extends Controller
                     return '<input type="checkbox" name="id_checkbox[]" class="id_checkbox" value="'.$row->id.'"/>';
                 })
                 ->addColumn('actions', function($row){
-                    $actionBtn = 
+                    $actionBtn =
                     '<div class="input-group-prepend">
                         <button type="button" class="btn btn-info btn-flat dropdown-toggle" data-toggle="dropdown">
                             Aksi
@@ -66,7 +68,7 @@ class AgendaController extends Controller
                 ->select('agenda.*', 'skpk.nm_skpk', 'users.name')
                 ->where('agenda.send', '=', true);
                 // ->orderBy('agenda.tgl_agenda', 'desc');
-            
+
             return datatables()->of($model)
                 ->editColumn('tgl_agenda', function($row){
                     return \Carbon\Carbon::parse($row->tgl_agenda)->format('d-m-Y H:i');
@@ -75,7 +77,7 @@ class AgendaController extends Controller
                     return \Carbon\Carbon::parse($row->tgl_spm)->format('d-m-Y');
                 })
                 ->addColumn('actions', function($row){
-                    $actionBtn = 
+                    $actionBtn =
                     '<div class="input-group-prepend">
                         <button type="button" class="btn btn-info btn-flat dropdown-toggle" data-toggle="dropdown">
                             Aksi
@@ -102,8 +104,7 @@ class AgendaController extends Controller
     public function create()
     {
         $skpk = Skpk::all();
-        $users = User::whereRole('verifikator')->orderBy('name')->get();
-        return view('agenda.create', compact('skpk', 'users'));
+        return view('agenda.create', compact('skpk'));
     }
 
     /**
@@ -113,10 +114,10 @@ class AgendaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {    
+    {
         $validator = Validator::make($request->all(), [
             'dari' => 'required',
-            'no_hp' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+            'no_hp' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
             'tgl_agenda' => 'required',
             'skpk_id' => 'required',
             'no_spm' => 'required',
@@ -134,11 +135,20 @@ class AgendaController extends Controller
 
         $no_spm = explode("/", $request->no_spm);
         $jenis_spm = $request->jenis_spm;
-        $standart_penomoran = array('UP', 'GU', 'TU', 'LS.GJ', 'LS.NON-GJ', 'LS.BJ', 'LS.PPKD');
-
-        $validator->after(function ($validator) use ($no_spm, $jenis_spm, $standart_penomoran) {
-            if(in_array($no_spm[2], $standart_penomoran)){
-                if($jenis_spm != $no_spm[2]){
+        $standart_penomoran = array('UP', 'GU', 'TU', 'LS.GJ', 'LS.NON-GJ', 'LS.BJ', 'LS.BJ-Perencanaan', 'LS.BJ-Pengawasan', 'LS.PPKD');
+        $uraian = $request->uraian;
+        $validator->after(function ($validator) use ($no_spm, $jenis_spm, $standart_penomoran, $uraian) {
+            $jenis = $no_spm[2];
+            if($jenis == 'LS.BJ'){
+                $lowercase = strtolower($uraian);
+                if(Str::of($lowercase)->contains('perencanaan')){
+                    $jenis = 'LS.BJ-Perencanaan';
+                }else if(Str::of($lowercase)->contains('pengawasan')){
+                    $jenis = 'LS.BJ-Pengawasan';
+                }
+            }
+            if(in_array($jenis, $standart_penomoran)){
+                if($jenis_spm != $jenis){
                     $validator->errors()->add('jenis_spm', 'Jenis SPM yang dipilih tidak sesuai standar penomoran SPM');
                 }
             }else{
@@ -152,12 +162,12 @@ class AgendaController extends Controller
                     ->withInput();
         }
 
-        $spm_belanja_daerah = array('UP', 'GU', 'TU', 'LS.BJ');
+        $spm_belanja_daerah = array('UP', 'GU', 'TU', 'LS.BJ', 'LS.BJ-Perencanaan', 'LS.BJ-Pengawasan');
         $spm_penatausahaan = array('LS.GJ', 'LS.NON-GJ', 'LS.PPKD');
         if(in_array($jenis_spm, $spm_belanja_daerah)){
-            $user_id_disposisi = User::whereRole('verifikator')->orderBy('id', 'asc')->first()->id;
+            $user_id_disposisi = User::whereRoleIs('verifikator-belanja-daerah')->first()->id;
         }elseif(in_array($jenis_spm, $spm_penatausahaan)){
-            $user_id_disposisi = User::whereRole('verifikator')->orderBy('id', 'desc')->first()->id;
+            $user_id_disposisi = User::whereRoleIs('verifikator-penatausahaan')->first()->id;
         }else{
             return redirect()->back()
             ->with('error_message', 'Gagal Mendapatkan Data Kasubbid');
@@ -166,6 +176,7 @@ class AgendaController extends Controller
         $nomor_urut_akhir = Agenda::max('nomor');
         // $kode = 'JP' . sprintf("%04s", abs($nomor_urut_akhir + 1)). '-2021';
         $cekDuplicate = false;
+        $kode='';
         do {
             $kode = strtoupper(uniqid('JP-'));
             if(!Agenda::where('kode', '=', $kode)->exists()){
@@ -270,7 +281,7 @@ class AgendaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'dari' => 'required',
-            'no_hp' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+            'no_hp' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
             'tgl_agenda' => 'required',
             'skpk_id' => 'required',
             'no_spm' => 'required',
@@ -288,11 +299,20 @@ class AgendaController extends Controller
 
         $no_spm = explode("/", $request->no_spm);
         $jenis_spm = $request->jenis_spm;
-        $standart_penomoran = array('UP', 'GU', 'TU', 'LS.GJ', 'LS.NON-GJ', 'LS.BJ');
-
-        $validator->after(function ($validator) use ($no_spm, $jenis_spm, $standart_penomoran) {
-            if(in_array($no_spm[2], $standart_penomoran)){
-                if($jenis_spm != $no_spm[2]){
+        $standart_penomoran = array('UP', 'GU', 'TU', 'LS.GJ', 'LS.NON-GJ', 'LS.BJ', 'LS.BJ-Perencanaan', 'LS.BJ-Pengawasan', 'LS.PPKD');
+        $uraian = $request->uraian;
+        $validator->after(function ($validator) use ($no_spm, $jenis_spm, $standart_penomoran, $uraian) {
+            $jenis = $no_spm[2];
+            if($jenis == 'LS.BJ'){
+                $lowercase = strtolower($uraian);
+                if(Str::of($lowercase)->contains('perencanaan')){
+                    $jenis = 'LS.BJ-Perencanaan';
+                }else if(Str::of($lowercase)->contains('pengawasan')){
+                    $jenis = 'LS.BJ-Pengawasan';
+                }
+            }
+            if(in_array($jenis, $standart_penomoran)){
+                if($jenis_spm != $jenis){
                     $validator->errors()->add('jenis_spm', 'Jenis SPM yang dipilih tidak sesuai standar penomoran SPM');
                 }
             }else{
@@ -306,12 +326,12 @@ class AgendaController extends Controller
                     ->withInput();
         }
 
-        $spm_belanja_daerah = array('UP', 'GU', 'TU', 'LS.BJ');
+        $spm_belanja_daerah = array('UP', 'GU', 'TU', 'LS.BJ', 'LS.BJ-Perencanaan', 'LS.BJ-Pengawasan');
         $spm_penatausahaan = array('LS.GJ', 'LS.NON-GJ', 'LS.PPKD');
         if(in_array($jenis_spm, $spm_belanja_daerah)){
-            $user_id_disposisi = User::whereRole('verifikator')->orderBy('id', 'asc')->first()->id;
+            $user_id_disposisi = User::whereRoleIs('verifikator-belanja-daerah')->first()->id;
         }elseif(in_array($jenis_spm, $spm_penatausahaan)){
-            $user_id_disposisi = User::whereRole('verifikator')->orderBy('id', 'desc')->first()->id;
+            $user_id_disposisi = User::whereRoleIs('verifikator-penatausahaan')->first()->id;
         }else{
             return redirect()->back()
             ->with('error_message', 'Gagal Mendapatkan Data Kasubbid');
@@ -371,16 +391,17 @@ class AgendaController extends Controller
                 'send' => true
             ]);
         }
-  
+
         return response()->json(['success'=>'Data Berhasil diteruskan']);
     }
 
     public function cetak($id)
     {
         $agenda = Agenda::findOrFail($id);
-        $users = User::whereRole('pengelola')->get();
-        $verifikators = User::whereRole('verifikator')->get();
-        return view('cetak.blangko_agenda', compact('agenda', 'users', 'verifikators'));
-        // dd($agenda);
+        $agenda->jml_kotor = number_format($agenda->jml_kotor, 0, ',', '.');
+        $users = User::whereRoleIs('pengelola')->get();
+        $verifikator_belanja_daerah = User::whereRoleIs('verifikator-belanja-daerah')->first();
+        $verifikator_penatausahaan = User::whereRoleIs('verifikator-belanja-daerah')->first();
+        return view('cetak.blangko_agenda', compact('agenda', 'users', 'verifikator_belanja_daerah', 'verifikator_penatausahaan'));
     }
 }

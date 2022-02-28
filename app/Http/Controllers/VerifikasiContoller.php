@@ -15,18 +15,18 @@ class VerifikasiContoller extends Controller
     public function index(Request $request)
     {
         $userId = auth()->id();
-        
+
         if($request->ajax()){
             $query = Verifikasi::Join('agenda', 'agenda.id', '=', 'verifikasi.agenda_id')
                         ->leftJoin('skpk', 'agenda.skpk_id', '=', 'skpk.id')
                         ->leftJoin('users', 'verifikasi.disposisi_user_id', '=', 'users.id')
                         ->select(
-                            'verifikasi.*', 
+                            'verifikasi.*',
                             'agenda.nomor', 'agenda.kode', 'agenda.tgl_agenda', 'agenda.no_spm', 'agenda.tgl_spm', 'agenda.uraian', 'agenda.jml_kotor', 'agenda.potongan', 'agenda.jml_bersih',
                             'skpk.nm_skpk', 'users.name'
                         )->where('verifikasi.send', '=', false)
                         ->where('agenda.disposisi_user_id', '=', $userId);
-            
+
             return datatables()->of($query)
                 ->editColumn('tgl_agenda', function($row){
                     return \Carbon\Carbon::parse($row->tgl_agenda)->format('d-m-Y H:i');
@@ -40,7 +40,7 @@ class VerifikasiContoller extends Controller
                     }
                 })
                 ->addColumn('actions', function($row){
-                    $actionBtn = 
+                    $actionBtn =
                     '<div class="input-group-prepend">
                         <button type="button" class="btn btn-info btn-flat dropdown-toggle" data-toggle="dropdown">
                             Aksi
@@ -63,18 +63,18 @@ class VerifikasiContoller extends Controller
     public function listVerifikasi(Request $request)
     {
         $userId = auth()->id();
-        
+
         if($request->ajax()){
             $query = Verifikasi::Join('agenda', 'agenda.id', '=', 'verifikasi.agenda_id')
                         ->leftJoin('skpk', 'agenda.skpk_id', '=', 'skpk.id')
                         ->leftJoin('users', 'verifikasi.disposisi_user_id', '=', 'users.id')
                         ->select(
-                            'verifikasi.*', 
+                            'verifikasi.*',
                             'agenda.nomor', 'agenda.kode', 'agenda.tgl_agenda', 'agenda.no_spm', 'agenda.tgl_spm', 'agenda.uraian', 'agenda.jml_kotor', 'agenda.potongan', 'agenda.jml_bersih',
                             'skpk.nm_skpk', 'users.name'
                         )->where('verifikasi.send', '=', true)
                         ->where('agenda.disposisi_user_id', '=', $userId);
-            
+
             return datatables()->of($query)
                 ->editColumn('tgl_agenda', function($row){
                     return \Carbon\Carbon::parse($row->tgl_agenda)->format('d-m-Y H:i');
@@ -83,7 +83,7 @@ class VerifikasiContoller extends Controller
                     return \Carbon\Carbon::parse($row->tgl_spm)->format('d-m-Y');
                 })
                 ->addColumn('actions', function($row){
-                    $actionBtn = 
+                    $actionBtn =
                     '<div class="input-group-prepend">
                         <button type="button" class="btn btn-info btn-flat dropdown-toggle" data-toggle="dropdown">
                             Aksi
@@ -111,7 +111,7 @@ class VerifikasiContoller extends Controller
         $verifikasi->agenda->potongan = number_format($verifikasi->agenda->potongan, 0, ',', '.');
         $verifikasi->agenda->jml_bersih = number_format($verifikasi->agenda->jml_bersih, 0, ',', '.');
 
-        $users = User::where('role', '=', 'pengelola')->get();
+        $users = User::whereRoleIs('pengelola')->get();
         return view('verifikasi.create', compact('verifikasi', 'users'));
     }
 
@@ -159,7 +159,7 @@ class VerifikasiContoller extends Controller
     public function mark(Request $request)
     {
         foreach($request->id as $id){
-            
+
             Pengelola::create([
                 'verifikasi_id' => $id
             ]);
@@ -168,7 +168,7 @@ class VerifikasiContoller extends Controller
                 'send' => true
             ]);
         }
-  
+
         return response()->json(['success'=>'Data Berhasil diteruskan']);
     }
 }

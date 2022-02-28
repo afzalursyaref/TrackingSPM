@@ -7,7 +7,7 @@
 @stop
 
 @push('css')
-    
+
 @endpush
 
 @section('content')
@@ -41,7 +41,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 @if ($agenda->send)
                     @php
                         $verifikasi = $agenda->verifikasi;
@@ -59,8 +59,8 @@
                         <div class="timeline-item">
                             <span class="time"><i class="fas fa-clock"></i> {{ $verifikasi->created_at->format('H:i') }}</span>
                             <h3 class="timeline-header no-border">
-                                <a href="#">{{ $agenda->user_input }}</a> 
-                                Menyerahkan Dokumen Agenda kepada 
+                                <a href="#">{{ $agenda->user_input }}</a>
+                                Menyerahkan Dokumen Agenda kepada
                                 <a href="#">
                                     {{ $agenda->disposisi_user->name }}
                                     @if ($agenda->disposisi_user->profile()->exists())
@@ -108,8 +108,8 @@
                                 <div class="timeline-item">
                                     <span class="time"><i class="fas fa-clock"></i> {{ $pengelola->created_at->format('H:i') }}</span>
                                     <h3 class="timeline-header no-border">
-                                        <a href="#">{{ $verifikasi->user_input }}</a> 
-                                        Meneruskan Dokumen Agenda kepada 
+                                        <a href="#">{{ $verifikasi->user_input }}</a>
+                                        Meneruskan Dokumen Agenda kepada
                                         <a href="#">
                                             {{ $verifikasi->disposisi_user->name }}
                                             @if ($verifikasi->disposisi_user->profile()->exists())
@@ -162,7 +162,7 @@
                                         <div class="timeline-item">
                                             <span class="time"><i class="fas fa-clock"></i> {{ $bud->created_at->format('H:i') }}</span>
                                             <h3 class="timeline-header no-border">
-                                                <a href="#">{{ $pengelola->user_input }}</a> 
+                                                <a href="#">{{ $pengelola->user_input }}</a>
                                                 Menyerahkan Dokumen kepada <a href="#">BUD / Kuasa BUD </a>
                                             </h3>
                                         </div>
@@ -208,14 +208,14 @@
                                             <div class="timeline-item">
                                                 <span class="time"><i class="fas fa-clock"></i> {{ $bud->updated_at->format('H:i') }}</span>
                                                 <h3 class="timeline-header"><a href="#">Berkas Telah Lolos VERIFIKASI</a></h3>
-                            
+
                                                 <div class="timeline-body">
                                                     <b>Nomor SPM : {{ $agenda->no_spm }}</b> <br/>
-                                                    Selanjutnya berkas akan dibuatkan SP2D
+                                                    Sudah dibuatkan SP2D
                                                 </div>
-                                                <div class="timeline-footer">
+                                                {{-- <div class="timeline-footer">
                                                     <small>berkas diterima oleh BUD / Kuasa BUD: {{ $bud->user_input }} </small>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                         <div>
@@ -231,7 +231,7 @@
                     @endif
 
                 @endif
-            
+
             </div>
         </div>
             <!-- /.col -->
@@ -245,7 +245,7 @@
 @push('js')
     <script>
         $(function () {
-            
+
 
         });
     </script>

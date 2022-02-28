@@ -27,7 +27,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $event->listen(BuildingMenu::class, function(BuildingMenu $event){
             if(auth()->check()){
-
                 $event->menu->add('MAIN NAVIGATION');
                 $event->menu->add([
                     'key' => 'dashboard',
@@ -35,10 +34,98 @@ class AppServiceProvider extends ServiceProvider
                     'url' => 'admin/dashboard',
                     'icon' => 'far fa-fw fa-file',
                 ]);
+
+                // dd(auth()->user()->hasRole('admin'));
+
+                // if(auth()->user()->hasRole('admin')){
+                //     $event->menu->add([
+                //         'key'       => 'master',
+                //         'header'    => 'MASTER'
+                //     ]);
+
+                //     $event->menu->add([
+                //         'key'  => 'skpk',
+                //         'text' => 'SKPK',
+                //         'url'  => 'admin/master/skpk',
+                //         'icon' => 'fas fa-fw fa-user',
+                //         'active'=> ['admin/user/*']
+                //     ]);
+                // }
+
+                $event->menu->add([
+                    'key'       => 'menu',
+                    'header'    => 'MENU'
+                ]);
+
+                if(auth()->user()->hasRole('front-office')){
+                    $event->menu->add([
+                        'key'         => 'Agenda',
+                        'text'        => 'agenda',
+                        'url'         => 'admin/agenda',
+                        'icon'        => 'far fa-fw fa-file',
+                        'active'      => ['admin/agenda/*']
+                    ]);
+                }
+
+                if(auth()->user()->hasRole('verifikator-belanja-daerah') || auth()->user()->hasRole('verifikator-penatausahaan')){
+                    $event->menu->add([
+                        'key'         => 'verifikasi',
+                        'text'        => 'Verifikasi',
+                        'url'         => 'admin/verifikasi',
+                        'icon'        => 'far fa-fw fa-file',
+                        'active'      => ['admin/verifikasi/*']
+                    ]);
+                }
+
+                if(auth()->user()->hasRole('pengelola')){
+                    $event->menu->add([
+                        'key'         => 'pengelola',
+                        'text'        => 'Pengelola',
+                        'url'         => 'admin/pengelola',
+                        'icon'        => 'far fa-fw fa-file',
+                        'active'      => ['admin/pengelola/*']
+                    ]);
+                }
+
+                if(auth()->user()->hasRole('bud') || auth()->user()->hasRole('kuasa-bud')){
+                    $event->menu->add([
+                        'key'         => 'bud',
+                        'text'        => 'Bud / Kuasa BUD',
+                        'url'         => 'admin/bud',
+                        'icon'        => 'far fa-fw fa-file',
+                        'active'      => ['admin/bud/*']
+                    ]);
+                }
+
+                $event->menu->add([
+                    'key'       => 'laporan',
+                    'header'    => 'LAPORAN'
+                ]);
+
+                $event->menu->add([
+                    'key'  => 'register',
+                    'text' => 'Register Agenda',
+                    'url'  => 'admin/laporan/register',
+                    'icon' => 'fas fa-fw fa-users',
+                    'active'=> ['admin/laporan/register']
+                ]);
+
+
                 $event->menu->add([
                     'key'       => 'pengaturan_akun',
                     'header'    => 'PENGATURAN AKUN'
                 ]);
+
+                if(auth()->user()->hasRole('admin')){
+                    $event->menu->add([
+                        'key'  => 'pengguna',
+                        'text' => 'pengguna',
+                        'url'  => 'admin/user',
+                        'icon' => 'fas fa-fw fa-users',
+                        'active'=> ['admin/user/*']
+                    ]);
+                }
+
                 $event->menu->add([
                     'key'  => 'profile',
                     'text' => 'profile',
@@ -51,75 +138,9 @@ class AppServiceProvider extends ServiceProvider
                     'url'  => 'profile/change-password',
                     'icon' => 'fas fa-fw fa-lock',
                 ]);
+            }
 
-
-                if(auth()->user()->role == 'admin'){
-                    $event->menu->add([
-                        'key'       => 'master',
-                        'header'    => 'MASTER'
-                    ]);
-
-                    $event->menu->addAfter('master', [
-                        'key'  => 'skpk',
-                        'text' => 'SKPK',
-                        'url'  => 'admin/master/skpk',
-                        'icon' => 'fas fa-fw fa-user',
-                        'active'=> ['admin/user/*']
-                    ]);
-    
-                    $event->menu->addAfter('pengaturan_akun', [
-                        'key'  => 'pengguna',
-                        'text' => 'pengguna',
-                        'url'  => 'admin/user',
-                        'icon' => 'fas fa-fw fa-user',
-                        'active'=> ['admin/user/*']
-                    ]);
-                }
-    
-                if(auth()->user()->role == 'front-office'){
-                    $event->menu->addAfter('dashboard', [
-                        'key'         => 'Agenda',
-                        'text'        => 'agenda',
-                        'url'         => 'admin/agenda',
-                        'icon'        => 'far fa-fw fa-file',
-                        'active'      => ['admin/agenda/*']
-                    ]);
-                }
-    
-                if(auth()->user()->role == 'verifikator'){
-                    $event->menu->addAfter('dashboard', [
-                        'key'         => 'verifikasi',
-                        'text'        => 'Verifikasi',
-                        'url'         => 'admin/verifikasi',
-                        'icon'        => 'far fa-fw fa-file',
-                        'active'      => ['admin/verifikasi/*']
-                    ]);
-                }
-    
-                if(auth()->user()->role == 'pengelola'){
-                    $event->menu->addAfter('dashboard', [
-                        'key'         => 'pengelola',
-                        'text'        => 'Pengelola',
-                        'url'         => 'admin/pengelola',
-                        'icon'        => 'far fa-fw fa-file',
-                        'active'      => ['admin/pengelola/*']
-                    ]);
-                }
-    
-                if(auth()->user()->role == 'bud' || auth()->user()->role == 'kuasa-bud'){
-                    $event->menu->addAfter('dashboard', [
-                        'key'         => 'bud',
-                        'text'        => 'Bud / Kuasa BUD',
-                        'url'         => 'admin/bud',
-                        'icon'        => 'far fa-fw fa-file',
-                        'active'      => ['admin/bud/*']
-                    ]);
-                }
-    
-                // if(auth()->user()->role != 'admin'){
-                //     $event->menu->remove('master');
-                // }
-            }else{
+            if(!auth()->check()){
                 $event->menu->add([
                     'key' => 'tentang',
                     'text' => 'Tentang Aplikasi',
@@ -134,8 +155,8 @@ class AppServiceProvider extends ServiceProvider
                     'icon' => 'fas fa-sign-in-alt',
                 ]);
             }
-            
+
         });
-        
+
     }
 }

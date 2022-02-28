@@ -14,7 +14,7 @@
                     Form Ubah Pengguna
                 </div>
                 <div class="card-body">
-                    
+
                     <form id="form" action="{{ route('user.update', $user->id) }}" method="POST" >
                         <input type="hidden" name="id" value="{{ $user->id }}">
                         @method('put')
@@ -23,8 +23,8 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="col-form-label" for="name">Nama</label>
-                                    <input id="name" name="name" type="text" 
-                                        class="form-control @error('name') is-invalid @enderror" 
+                                    <input id="name" name="name" type="text"
+                                        class="form-control @error('name') is-invalid @enderror"
                                         value="{{ old('name') ?? $user->name }}" required>
                                     @error('name')
                                         <span class="error invalid-feedback">{{ $message }}</span>
@@ -34,8 +34,8 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="col-form-label" for="email">Email</label>
-                                    <input id="email" name="email" type="email" 
-                                        class="form-control @error('email') is-invalid @enderror" 
+                                    <input id="email" name="email" type="email"
+                                        class="form-control @error('email') is-invalid @enderror"
                                         value="{{ old('email') ?? $user->email }}" required>
                                     @error('email')
                                         <span class="error invalid-feedback">{{ $message }}</span>
@@ -44,7 +44,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="col-form-label" for="role">Role</label>
@@ -59,6 +59,24 @@
                                       </select>
                                 </div>
                             </div>
+                        </div> --}}
+
+                        <div class="row">
+                            <div class="col-sm-3 text-right">
+                                <label class="col-form-label">Role :</label>
+                            </div>
+                            <div class="col-sm-6">
+                                @foreach ($roles as $role)
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input"
+                                            @if ($user->hasRole($role->name))
+                                                checked
+                                            @endif
+                                            id="role-{{ $role->name }}" value="{{ $role->name }}" name="role[]">
+                                        <label class="custom-control-label" for="role-{{ $role->name }}">{{ $role->display_name }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
 
                         <hr/>
@@ -66,8 +84,8 @@
                         <div class="form-group row">
                             <label class="col-sm-3 text-sm-right col-form-label" for="username">Username</label>
                             <div class="col-sm-6">
-                                <input id="username" name="username" type="text" 
-                                    class="form-control @error('username') is-invalid @enderror" 
+                                <input id="username" name="username" type="text"
+                                    class="form-control @error('username') is-invalid @enderror"
                                     value="{{ old('username') ?? $user->username }}" required>
                                 @error('username')
                                     <span class="error invalid-feedback">{{ $message }}</span>
@@ -78,7 +96,7 @@
                         <div class="form-group row">
                             <label class="col-sm-3 text-sm-right col-form-label" for="password">Password</label>
                             <div class="col-sm-6">
-                                <input id="password" name="password" type="password" 
+                                <input id="password" name="password" type="password"
                                     class="form-control @error('password') is-invalid @enderror">
                                 @error('password')
                                     <span class="error invalid-feedback">{{ $message }}</span>
@@ -89,7 +107,7 @@
                         <div class="form-group row">
                             <label class="col-sm-3 text-sm-right col-form-label" for="password_confirm">Konfirmasi Password</label>
                             <div class="col-sm-6">
-                                <input id="password_confirm" name="password_confirmation" type="password" 
+                                <input id="password_confirm" name="password_confirmation" type="password"
                                     class="form-control">
                             </div>
                         </div>
@@ -101,7 +119,7 @@
                         </div>
 
                     </form>
-                    
+
                 </div>
             </div>
         </div>

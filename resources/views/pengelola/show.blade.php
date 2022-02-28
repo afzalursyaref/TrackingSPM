@@ -11,7 +11,7 @@
     <div class="col-12">
         <div class="callout callout-info">
             <h5>
-                Nomor Agenda : <strong>{{ $pengelola->verifikasi->agenda->nomor }}</strong>
+                Nomor Agenda : <strong>{{ str_pad($pengelola->verifikasi->agenda->nomor, 4, '0', STR_PAD_LEFT) }}</strong>
                 <small class="float-right">Tanggal: {{ $pengelola->verifikasi->agenda->tgl_agenda->format('d-m-Y H:i') }}</small>
             </h5>
             Kode : <b>{{ $pengelola->verifikasi->agenda->kode }}</b>
@@ -36,7 +36,7 @@
                     Jenis SPM : <b>{{ $pengelola->verifikasi->agenda->jenis_spm }}</b> <br/>
                     Sumber Dana : <b>{{ $pengelola->verifikasi->agenda->sumberdana }}</b> <br/>
                 </div>
-            
+
                 <div class="col-sm-4">
                     Penerima:
                     <div>
@@ -45,13 +45,13 @@
                         {{ $pengelola->verifikasi->agenda->rek_penerima }}
                     </div>
                 </div>
-            
+
                 <div class="col-sm-4 text-right">
                     <b>Jumlah Kotor:</b> Rp. {{ $pengelola->verifikasi->agenda->jml_kotor }}<br>
                     <b>Potongan:</b> Rp. {{ $pengelola->verifikasi->agenda->potongan }}<br>
                     <b>Jumlah Bersih:</b> Rp. {{ $pengelola->verifikasi->agenda->jml_bersih }}<br>
                 </div>
-            
+
             </div>
             <hr/>
             <div class="row">

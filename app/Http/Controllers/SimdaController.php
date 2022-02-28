@@ -34,32 +34,33 @@ class SimdaController extends Controller
             //     $binds = implode(',', $_no_spm);
             //     $queryNotIn = "and no_spm not in ($binds)";
             // }
-    
+
             // $list_spm = DB::connection('sqlsrv')->select(
-            //     'select 
+            //     'select
             //     no_spm, convert(varchar, tgl_spm, 105) as tgl_spm, uraian, nm_penerima, bank_penerima, rek_penerima, npwp,
             //     (select cast(SUM(nilai) as numeric(19,0)) from ta_spm_rinc where no_spm=ta_spm.no_spm) as jml_kotor,
             //     (select cast(ISNULL(SUM(nilai), 0) as numeric(19,0)) from ta_spm_pot where no_spm=ta_spm.no_spm) as potongan
-            //     from ta_spm where kd_urusan=? and kd_bidang=? and kd_unit=? and kd_sub=? ', 
+            //     from ta_spm where kd_urusan=? and kd_bidang=? and kd_unit=? and kd_sub=? ',
             //     [$kd_urusan, $kd_bidang, $kd_unit, $kd_sub]
             // );
 
             $list_spm = DB::connection('sqlsrv')->table('ta_spm')
                 ->select(
-                    'no_spm', 
-                    DB::raw('convert(varchar, tgl_spm, 105) as tgl_spm'), 
-                    'uraian', 
-                    'nm_penerima', 
-                    'bank_penerima', 
-                    'rek_penerima', 
+                    'no_spm',
+                    DB::raw('convert(varchar, tgl_spm, 105) as tgl_spm'),
+                    'uraian',
+                    'nm_penerima',
+                    'bank_penerima',
+                    'rek_penerima',
                     'npwp',
-                    DB::raw('(select cast(SUM(nilai) as numeric(19,0)) from ta_spm_rinc where no_spm=ta_spm.no_spm) as jml_kotor'), 
+                    DB::raw('(select cast(SUM(nilai) as numeric(19,0)) from ta_spm_rinc where no_spm=ta_spm.no_spm) as jml_kotor'),
                     DB::raw('(select cast(ISNULL(SUM(nilai), 0) as numeric(19,0)) from ta_spm_pot where no_spm=ta_spm.no_spm) as potongan'),
                 )->where('kd_urusan', '=', $kd_urusan)
                 ->where('kd_bidang', '=', $kd_bidang)
                 ->where('kd_unit', '=', $kd_unit)
                 ->where('kd_sub', '=', $kd_sub)
                 ->whereNotIn('no_spm', $_no_spm)
+                ->orderBy('tgl_spm', 'desc')
                 ->get();
 
             return datatables()->of($list_spm)
@@ -72,7 +73,7 @@ class SimdaController extends Controller
                 })->rawColumns(['jml_bersih','action'])
                 ->toJson();
         }
-        
+
     }
 
     public function getSkpk()
@@ -102,7 +103,7 @@ class SimdaController extends Controller
             $sp2d = Db::connection('sqlsrv')->table('ta_sp2d')
                 ->select(
                     'no_sp2d', 'no_spm', 'keterangan',
-                    DB::raw('(select cast(SUM(nilai) as numeric(19,0)) from ta_spm_rinc where no_spm=ta_sp2d.no_spm) as jml_kotor'), 
+                    DB::raw('(select cast(SUM(nilai) as numeric(19,0)) from ta_spm_rinc where no_spm=ta_sp2d.no_spm) as jml_kotor'),
                     DB::raw('(select cast(ISNULL(SUM(nilai), 0) as numeric(19,0)) from ta_spm_pot where no_spm=ta_sp2d.no_spm) as potongan'),
                 )
                 ->get();
@@ -113,7 +114,7 @@ class SimdaController extends Controller
                 })
                 ->toJson();
         }
-        
+
         return view('dashboard.sp2d');
     }
 }

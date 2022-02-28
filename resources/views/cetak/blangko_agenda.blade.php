@@ -36,9 +36,9 @@
             <a href="{{ $url }}" class="button">Kembali</a>
         </div>
     @endif
-    
+
     <div class="page" contenteditable="false">
-        
+
         <div style="border: 1px solid black; padding:1px; width:100%; font-weight: bold; font-size:14px; border-bottom:none">
             <div style="border: 1px solid black; padding:8px; text-align:center;">
                 PEMERINTAH KABUPATEN NAGAN RAYA <br>
@@ -71,7 +71,7 @@
                 <tr>
                     <td style="white-space: pre">&#x09;Nomor</td>
                     <td>:</td>
-                    <td>{{ $agenda->nomor }}</td>
+                    <td>{{ str_pad($agenda->nomor, 4, '0', STR_PAD_LEFT) }}</td>
                 </tr>
                 <tr>
                     <td style="white-space: pre; vertical-align: top">&#x09;Surat Dari</td>
@@ -79,20 +79,34 @@
                     <td>{{ $agenda->skpk->nm_skpk }}</td>
                 </tr>
                 <tr>
+                    <td style="white-space: pre; vertical-align: top">&#x09;No. SPM</td>
+                    <td style="vertical-align: top">:</td>
+                    <td>{{ $agenda->no_spm }}</td>
+                </tr>
+                <tr>
+                    <td style="white-space: pre; vertical-align: top">&#x09;Jenis SPM</td>
+                    <td style="vertical-align: top">:</td>
+                    <td>{{ $agenda->jenis_spm }}</td>
+                </tr>
+                <tr>
+                    <td style="white-space: pre; vertical-align: top">&#x09;Nilai SPM</td>
+                    <td style="vertical-align: top">:</td>
+                    <td>Rp. {{ $agenda->jml_kotor }},-</td>
+                </tr>
+                <tr>
+                    <td style="white-space: pre; vertical-align: top">&#x09;Pemkas / Vendor</td>
+                    <td style="vertical-align: top">:</td>
+                    <td>{{ $agenda->nm_penerima }} </td>
+                </tr>
+                <tr>
                     <td colspan="3" style="font-weight: bold; white-space: pre">3. &#x09;DITERUSKAN KEPADA</td>
                 </tr>
-                @foreach ($verifikators as $verifikator)
-                    @php
-                        if($verifikator->id == $agenda->disposisi_user_id){
-                            $check = "fa-check-square";
-                        }else{
-                            $check = "fa-square";
-                        }
-                    @endphp
-                    <tr>
-                        <td style="white-space: pre" colspan="3">&#x09;<i class="far {{ $check }}"></i> {{ $verifikator->profile->jabatan }}</td>
-                    </tr>
-                @endforeach
+                <tr>
+                    <td style="white-space: pre" colspan="3">&#x09;<i class="far {{ $verifikator_belanja_daerah->id == $agenda->disposisi_user_id ? 'fa-check-square' : 'fa-square' }}"></i> {{ $verifikator_belanja_daerah->profile->jabatan }}</td>
+                </tr>
+                <tr>
+                    <td style="white-space: pre" colspan="3">&#x09;<i class="far {{ $verifikator_penatausahaan->id == $agenda->disposisi_user_id ? 'fa-check-square' : 'fa-square' }}"></i> {{ $verifikator_penatausahaan->profile->jabatan }}</td>
+                </tr>
             </table>
         </div>
         <div style="border: 1px solid black; padding:1px; width:100%; border-bottom:none; border-top:none">
@@ -105,7 +119,7 @@
                 DISPOSISI
             </div>
         </div>
-        
+
         <div style="display:grid; grid-template-columns:1fr 2fr; border: 1px solid black; padding:1px; width:100%; border-top:none">
             <div style="border: 1px solid black; padding:15px; border-right:none;">
                <u>Staff Perbendaharaan</u>
@@ -118,33 +132,52 @@
                @endforeach
             </div>
             <div style="display:grid; grid-template-rows:1fr 1fr 1fr">
-                <div style="border: 1px solid black; padding:5px; height:120px; border-bottom:none;">
+                <div style="border: 1px solid black; padding:5px; height:90px; border-bottom:none;">
                     <u>Kasubbid:</u>
                 </div>
-                <div style="border: 1px solid black; padding:5px; height:120px; border-bottom:none;">
+                <div style="border: 1px solid black; padding:5px; height:90px; border-bottom:none;">
                     <u>Verifikasi:</u>
                 </div>
-                <div style="border: 1px solid black; padding:5px; height:120px;">
+                <div style="border: 1px solid black; padding:5px; height:90px;">
                     <u>Kabid:</u>
                 </div>
             </div>
         </div>
 
-        <hr style="border-top:2px dashed black; margin-top:10px; margin-bottom:20px;"></hr>
-        
-
-        <div style="border: 1px solid black; padding:1px; width:100%; display:grid; grid-template-columns:2fr 1fr">
-            <div style="border: 1px solid black; padding:8px;">
-                <table style="width:100%;font-weight:bold">
+        <div style="border: 1px solid black; padding:1px; width:100%; border-top:none">
+            <div style="border: 1px solid black; padding:5px;text-align:left; width:100%">
+                <table style="width:100%;">
                     <tr>
-                        <td style="width: 30%">Diantar Oleh:</td>
+                        <td style="width: 100px">Diantar Oleh:</td>
                         <td>:</td>
                         <td>{{ $agenda->dari }}</td>
+                        <td style="text-align: right; padding-right:20px"> <i>dinput oleh : {{ $agenda->user_input }}</i> </td>
                     </tr>
                     <tr>
                         <td>No Hp</td>
                         <td>:</td>
                         <td>{{ $agenda->no_hp }}</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <hr style="border-top:2px dashed black; margin-top:10px; margin-bottom:20px;"></hr>
+
+
+        <div style="border: 1px solid black; padding:1px; width:100%; display:grid; grid-template-columns:2fr 1fr">
+            <div style="border: 1px solid black; padding:8px;">
+                <table style="width:100%;font-weight:bold">
+                    <tr>
+                        <td style="width: 120px">Nomor Agenda</td>
+                        <td style="width: 10px">:</td>
+                        <td style="text-align: left">{{ str_pad($agenda->nomor, 4, '0', STR_PAD_LEFT) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Diantarkan oleh</td>
+                        <td>:</td>
+                        <td style="text-align: left">{{ $agenda->dari }}</td>
                     </tr>
                     <tr>
                         <td colspan="3">{{ $agenda->skpk->nm_skpk }}</td>
@@ -177,6 +210,6 @@
             window.print();
         </script>
     @endif
-    
+
 </body>
 </html>

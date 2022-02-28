@@ -23,34 +23,34 @@
                     Form Agenda
                 </div>
                 <div class="card-body">
-                    
+
                     <form id="form" action="{{ route('agenda.store') }}" method="POST" >
                         @csrf
                         <div class="row">
                             {{-- <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="col-form-label" for="nomor">Nomor</label>
-                                    <input id="nomor" name="nomor" type="text" 
-                                        class="form-control @error('nomor') is-invalid @enderror" 
+                                    <input id="nomor" name="nomor" type="text"
+                                        class="form-control @error('nomor') is-invalid @enderror"
                                         value="{{ old('nomor') }}" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="col-form-label" for="kode">Kode</label>
-                                    <input id="kode" name="kode" type="text" 
-                                        class="form-control @error('kode') is-invalid @enderror" 
+                                    <input id="kode" name="kode" type="text"
+                                        class="form-control @error('kode') is-invalid @enderror"
                                         value="{{ old('kode') }}" required>
                                 </div>
                             </div> --}}
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="col-form-label" for="dari">Nama Pemberi Berkas</label>
-                                    <input id="dari" name="dari" type="text" 
-                                        class="form-control @error('dari') is-invalid @enderror" 
+                                    <input id="dari" name="dari" type="text"
+                                        class="form-control @error('dari') is-invalid @enderror"
                                         value="{{ old('dari') }}" required>
                                     @error('dari')
                                         <span class="error invalid-feedback">{{ $message }}</span>
@@ -60,9 +60,9 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="col-form-label" for="no_hp">Nomor HP</label>
-                                    <input id="no_hp" name="no_hp" type="text" 
-                                        class="form-control @error('no_hp') is-invalid @enderror" 
-                                        value="{{ old('no_hp') }}" required>
+                                    <input id="no_hp" name="no_hp" type="text"
+                                        class="form-control @error('no_hp') is-invalid @enderror"
+                                        value="{{ old('no_hp') }}">
                                     @error('no_hp')
                                         <span class="error invalid-feedback">{{ $message }}</span>
                                     @enderror
@@ -74,7 +74,7 @@
                                 <div class="form-group">
                                     <label class="col-form-label" for="tgl_agenda">Tanggal Agenda</label>
                                     <div class="input-group date" id="tgl_agenda" data-target-input="nearest">
-                                        <input type="text" class="form-control @error('tgl_agenda') is-invalid @enderror 
+                                        <input type="text" class="form-control @error('tgl_agenda') is-invalid @enderror
                                             datetimepicker-input" name="tgl_agenda" data-target="#tgl_agenda" value="{{ old('tgl_agenda') }}" required/>
                                         <div class="input-group-append" data-target="#tgl_agenda" data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -115,7 +115,7 @@
                                     <div id="input_group_no_spm" class="input-group">
                                         <input id="no_spm" name="no_spm" type="text" class="form-control @error('no_spm') is-invalid @enderror" value="{{ old('no_spm') }}" readonly required>
                                         <div class="input-group-prepend">
-                                            <button type="button" class="btn btn-danger" 
+                                            <button type="button" class="btn btn-danger"
                                                 id="tarik_data"
                                                 data-attr="{{ route('spm_all') }}"
                                                 >Tarik Data</button>
@@ -130,7 +130,7 @@
                                 <div class="form-group">
                                     <label class="col-form-label" for="tgl_spm">Tanggal SPM</label>
                                     <div class="input-group date" id="tgl_spm" data-target-input="nearest">
-                                        <input type="text" class="form-control @error('tgl_spm') is-invalid @enderror datetimepicker-input" 
+                                        <input type="text" class="form-control @error('tgl_spm') is-invalid @enderror datetimepicker-input"
                                             name="tgl_spm" data-target="#tgl_spm" value="{{ old('tgl_spm') }}" readonly required/>
                                         <div class="input-group-append" data-target="#tgl_spm" data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -155,13 +155,13 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
                                     <label class="col-form-label" for="nm_penerima">Nama Penerima</label>
-                                    <input id="nm_penerima" name="nm_penerima" type="text" 
-                                        class="form-control @error('nm_penerima') is-invalid @enderror" 
+                                    <input id="nm_penerima" name="nm_penerima" type="text"
+                                        class="form-control @error('nm_penerima') is-invalid @enderror"
                                         value="{{ old('nm_penerima') }}" readonly required>
                                     @error('nm_penerima')
                                         <span class="error invalid-feedback">{{ $message }}</span>
@@ -174,8 +174,8 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="col-form-label" for="bank_penerima">Bank Penerima</label>
-                                    <input id="bank_penerima" name="bank_penerima" type="text" 
-                                        class="form-control @error('bank_penerima') is-invalid @enderror" 
+                                    <input id="bank_penerima" name="bank_penerima" type="text"
+                                        class="form-control @error('bank_penerima') is-invalid @enderror"
                                         value="{{ old('bank_penerima') }}" readonly required>
                                     @error('bank_penerima')
                                         <span class="error invalid-feedback">{{ $message }}</span>
@@ -185,8 +185,8 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="col-form-label" for="rek_penerima">Rekening Penerima</label>
-                                    <input id="rek_penerima" name="rek_penerima" type="text" 
-                                        class="form-control @error('rek_penerima') is-invalid @enderror" 
+                                    <input id="rek_penerima" name="rek_penerima" type="text"
+                                        class="form-control @error('rek_penerima') is-invalid @enderror"
                                         value="{{ old('rek_penerima') }}" readonly required>
                                     @error('rek_penerima')
                                         <span class="error invalid-feedback">{{ $message }}</span>
@@ -196,8 +196,8 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="col-form-label" for="npwp">NPWP</label>
-                                    <input id="npwp" name="npwp" type="text" 
-                                        class="form-control @error('npwp') is-invalid @enderror" 
+                                    <input id="npwp" name="npwp" type="text"
+                                        class="form-control @error('npwp') is-invalid @enderror"
                                         value="{{ old('npwp') }}" readonly required>
                                     @error('npwp')
                                         <span class="error invalid-feedback">{{ $message }}</span>
@@ -210,8 +210,8 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="col-form-label " for="jml_kotor">Jumlah Kotor</label>
-                                    <input id="jml_kotor" name="jml_kotor" type="text" 
-                                        class="form-control text-right @error('jml_kotor') is-invalid @enderror" 
+                                    <input id="jml_kotor" name="jml_kotor" type="text"
+                                        class="form-control text-right @error('jml_kotor') is-invalid @enderror"
                                         value="{{ old('jml_kotor') }}" readonly required>
                                     @error('jml_kotor')
                                         <span class="error invalid-feedback">{{ $message }}</span>
@@ -221,8 +221,8 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="col-form-label" for="potongan">Potongan</label>
-                                    <input id="potongan" name="potongan" type="text" 
-                                        class="form-control text-right @error('potongan') is-invalid @enderror" 
+                                    <input id="potongan" name="potongan" type="text"
+                                        class="form-control text-right @error('potongan') is-invalid @enderror"
                                         value="{{ old('potongan') }}" readonly required>
                                     @error('potongan')
                                         <span class="error invalid-feedback">{{ $message }}</span>
@@ -232,8 +232,8 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="col-form-label" for="jml_bersih">Jumlah Bersih</label>
-                                    <input id="jml_bersih" name="jml_bersih" type="text" 
-                                        class="form-control text-right @error('jml_bersih') is-invalid @enderror" 
+                                    <input id="jml_bersih" name="jml_bersih" type="text"
+                                        class="form-control text-right @error('jml_bersih') is-invalid @enderror"
                                         value="{{ old('jml_bersih') }}" readonly required>
                                     @error('jml_bersih')
                                         <span class="error invalid-feedback">{{ $message }}</span>
@@ -269,6 +269,14 @@
                                     <div class="custom-control custom-radio">
                                         <input class="custom-control-input @error('jenis_spm') is-invalid @enderror" type="radio" id="customRadio6" name="jenis_spm" value="LS.BJ" {{ (old('jenis_spm') == 'LS.BJ') ? 'checked' : '' }}>
                                         <label for="customRadio6" class="custom-control-label" >LS Barang Jasa</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input @error('jenis_spm') is-invalid @enderror" type="radio" id="customRadio6" name="jenis_spm" value="LS.BJ-Perencanaan" {{ (old('jenis_spm') == 'LS.BJ-Perencanaan') ? 'checked' : '' }}>
+                                        <label for="customRadio6" class="custom-control-label" >LS Barang Jasa - Perencanaan</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input @error('jenis_spm') is-invalid @enderror" type="radio" id="customRadio6" name="jenis_spm" value="LS.BJ-Pengawasan" {{ (old('jenis_spm') == 'LS.BJ-Pengawasan') ? 'checked' : '' }}>
+                                        <label for="customRadio6" class="custom-control-label" >LS Barang Jasa - Pengawasan</label>
                                     </div>
                                     <div class="custom-control custom-radio">
                                         <input class="custom-control-input @error('jenis_spm') is-invalid @enderror" type="radio" id="customRadio7" name="jenis_spm" value="LS.PPKD" {{ (old('jenis_spm') == 'LS.PPKD') ? 'checked' : '' }}>
@@ -316,7 +324,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         {{-- <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
@@ -351,7 +359,7 @@
                             </div>
                         </div>
                     </form>
-                    
+
                 </div>
             </div>
         </div>
@@ -359,7 +367,7 @@
 
     <div class="modal fade" id="modal-overlay" data-backdrop="static" data-keyboard="true">
         <div class="modal-dialog modal-xl" >
-          <div class="modal-content">  
+          <div class="modal-content">
             {{-- <div class="modal-header">
                 <h4 class="modal-title">Connecting...</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -413,9 +421,9 @@
         // $(document).ready(function() {
         //     $('#tgl_agenda').datetimepicker({ icons: { time: 'far fa-clock' } });
         // });
-        
+
         var table;
-     
+
         $(document).ready(function() {
             $('.select2bs4').select2({
                 theme: 'bootstrap4'
@@ -453,9 +461,9 @@
             let bidang = $('#skpk_id').find(':selected').data('bidang');
             let unit = $('#skpk_id').find(':selected').data('unit');
             let sub = $('#skpk_id').find(':selected').data('sub');
-            
+
             let href = $(this).attr('data-attr') + '?kd_urusan=' + urusan + '&kd_bidang=' + bidang + '&kd_unit=' + unit + '&kd_sub=' + sub;
-            
+
             table = $('#example1').DataTable({
                 destroy: true,
                 processing: true,
@@ -463,8 +471,8 @@
                     "loadingRecords": "Loading...",
                     "processing":     "Harap Menunggu, sistem sedang menghubungkan ke Server SIMDA..."
                 },
-                responsive: false, 
-                lengthChange: false, 
+                responsive: false,
+                lengthChange: false,
                 autoWidth: false,
                 serverSide: true,
                 scrollY: 500,
@@ -473,13 +481,13 @@
                     url: href,
                     error: function (jqXHR, textStatus, errorThrown) {
                         $('#modal-danger').modal("show");
-                    } 
+                    }
                 },
                 columns: [
                     {
-                        data: 'action', 
-                        name: 'action', 
-                        orderable: false, 
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
                         searchable: false
                     },
                     {data: 'no_spm', name: 'no_spm'},
@@ -492,9 +500,9 @@
                     {data: 'jml_kotor', name: 'jml_kotor', className: "text-right", render: $.fn.dataTable.render.number('.', ',', 0, '')},
                     {data: 'potongan', name: 'potongan', className: "text-right", render: $.fn.dataTable.render.number('.', ',', 0, '')},
                     {data: 'jml_bersih', name: 'jml_bersih', className: "text-right", render: $.fn.dataTable.render.number('.', ',', 0, '')},
-                    
+
                 ],
-                columnDefs: [ 
+                columnDefs: [
                     {
                         targets: 3,
                         render: function ( data, type, row ) {
@@ -526,14 +534,24 @@
             document.getElementById('jml_bersih').value = formatNumber(data.jml_bersih);
 
             let no_spm_ = data.no_spm.split('/');
+            let jenis_spm = no_spm_[2];
+            if(jenis_spm == 'LS.BJ'){
+                let lowercase = data.uraian.toLowerCase();
+                if(lowercase.indexOf('perencanaan') !== -1){
+                    jenis_spm = 'LS.BJ-Perencanaan';
+                }else if(lowercase.indexOf('pengawasan') !== -1){
+                    jenis_spm = 'LS.BJ-Pengawasan';
+                }
+            }
+
             try {
-                $("input[name=jenis_spm][value='" + no_spm_[2] + "']").prop('checked', true);
+                $("input[name=jenis_spm][value='" + jenis_spm + "']").prop('checked', true);
             } catch (error) {
                 alert("Format Penomoran SPM Tidak Sesuai Standar");
             }
             $('#modal-overlay').modal("hide");
         });
-        
+
         let rupiah = Intl.NumberFormat('id');
         function formatNumber(num) {
             return rupiah.format(num);

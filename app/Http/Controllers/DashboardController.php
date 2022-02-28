@@ -15,11 +15,14 @@ class DashboardController extends Controller
         if($request->ajax()){
             $model = Agenda::leftJoin('skpk', 'agenda.skpk_id', '=', 'skpk.id')
                 ->select('agenda.*', 'skpk.nm_skpk')
-                ->orderBy('agenda.tgl_agenda', 'asc');
-            
+                ->orderBy('agenda.tgl_agenda', 'desc');
+
             return datatables()->of($model)
+                ->editColumn('nomor', function($row){
+                    return str_pad($row->nomor, 4, '0', STR_PAD_LEFT);
+                })
                 ->addColumn('actions', function($row){
-                    $actionBtn = 
+                    $actionBtn =
                     '<div class="input-group-prepend">
                         <button type="button" class="btn btn-info btn-flat dropdown-toggle" data-toggle="dropdown">
                             Aksi

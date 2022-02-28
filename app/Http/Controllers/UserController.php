@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -17,8 +18,15 @@ class UserController extends Controller
     {
         if($request->ajax()){
             $model = User::orderBy('name', 'ASC');
-            
+
             return datatables()->of($model)
+                ->editColumn('role', function($row){
+                    $output = '';
+                    foreach ($row->roles()->pluck('display_name') as $role) {
+                        $output .= $role . ', ';
+                    }
+                    return $output;
+                })
                 ->addColumn('actions', function($row){
                     $actionBtn = '<a class="btn btn-info btn-sm" href="'.route('user.edit', $row->id).'"><i class="fas fa-pencil-alt"></i></a>
                                   <a class="btn btn-danger btn-sm deleteUser" href="javascript:void(0)" data-id="'.$row->id.'"><i class="fas fa-trash"></i></a>';
@@ -36,7 +44,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('user.create');
+        $roles = Role::all();
+        return view('user.create', compact('roles'));
     }
 
     /**
@@ -55,13 +64,15 @@ class UserController extends Controller
             'role' => 'required'
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'username' => $request->username,
             'password' => Hash::make($request->password),
-            'role' => $request->role
         ]);
+
+        $user->attachRoles($request->role);
+        // $user->roles()->attach($request->role);
 
         return redirect()->route('user.index')
             ->with('success_message', 'Berhasil menambah Pengguna Baru');
@@ -88,7 +99,8 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        return view('user.edit', compact('user'));
+        $roles = Role::all();
+        return view('user.edit', compact('user', 'roles'));
     }
 
     /**
@@ -114,18 +126,18 @@ class UserController extends Controller
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
-                'role' => $request->role,
                 'username' => $request->username
             ]);
         }else{
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
-                'role' => $request->role,
                 'username' => $request->username,
                 'password' => Hash::make($request->password)
             ]);
         }
+
+        $user->syncRoles($request->role);
 
         return redirect()->route('user.index')
             ->with('success_message', 'Berhasil Mengubah Data Pengguna');
